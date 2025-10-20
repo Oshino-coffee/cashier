@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <style>
-/* Prevent 300ms delay / double-tap zoom on controls */
+/* allow rapid taps; avoid zoom */
 a, button, input, select, textarea, summary, [role="button"] { touch-action: manipulation; }
 html { -webkit-text-size-adjust: 100%; }
 </style>
@@ -639,15 +639,19 @@ $('#resetAll').addEventListener('click', ()=> {
 
 </script>
 <script>
-// Block double-tap zoom on iOS Safari while keeping normal taps
+// Rapid-tap enhancer for iOS/Android: fire click on touchstart, prevent delayed click.
+// This keeps zoom disabled (via viewport) but allows fast repeated taps.
 (function(){
-  var lastTouchEnd = 0;
-  document.addEventListener('touchend', function (event) {
-    var now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-      event.preventDefault();
-    }
-    lastTouchEnd = now;
+  function wants(t){
+    return t && t.closest && t.closest('button, a, [role="button"], .chip, [data-cash], [data-action], [data-id]');
+  }
+  document.addEventListener('touchstart', function(e){
+    var t = wants(e.target);
+    if(!t) return;
+    // If element is disabled or has aria-disabled, ignore
+    if (t.disabled || t.getAttribute('aria-disabled') === 'true') return;
+    t.click();
+    e.preventDefault();
   }, {passive:false});
 })();
 </script>
