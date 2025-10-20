@@ -182,16 +182,6 @@ const idb = {
   del(store, key) { return new Promise((res, rej)=>{ const r = idb.tx(store,'readwrite').delete(key); r.onsuccess=()=>res(); r.onerror=rej; }); },
   clear(store) { return new Promise((res, rej)=>{ const r = idb.tx(store,'readwrite').clear(); r.onsuccess=()=>res(); r.onerror=rej; }); }
 };
-      req.onsuccess = e => { idb.db = e.target.result; resolve(); };
-      req.onerror = e => reject(e);
-    });
-  },
-  tx(store, mode) { return idb.db.transaction(store, mode).objectStore(store); },
-  get(store, key) { return new Promise((res, rej)=>{ const r=idb.tx(store,'readonly').get(key); r.onsuccess=()=>res(r.result); r.onerror=rej; }); },
-  getAll(store) { return new Promise((res, rej)=>{ const r=idb.tx(store,'readonly').getAll(); r.onsuccess=()=>res(r.result); r.onerror=rej; }); },
-  put(store, val) { return new Promise((res, rej)=>{ const r=idb.tx(store,'readwrite').put(val); r.onsuccess=()=>res(); r.onerror=rej; }); },
-  del(store, key) { return new Promise((res, rej)=>{ const r=idb.tx(store,'readwrite').delete(key); r.onsuccess=()=>res(); r.onerror=rej; }); },
-};
 
 const DEFAULT_ITEMS = [
   { id:'drip',   name:'ドリップコーヒー', price:300, category:'ドリンク', active:true, stock:null },
