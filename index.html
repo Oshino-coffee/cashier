@@ -558,6 +558,45 @@ $('#openStats').addEventListener('click', openStats);
 
 
 
+
+// ===== 初期化（売上・集計）ボタンの処理 =====
+document.addEventListener('DOMContentLoaded', ()=>{
+  try {
+    const resetBtn = $('#resetAll');
+    if (!resetBtn) return;
+    resetBtn.addEventListener('click', ()=> {
+      const dlg = $('#resetConfirmDlg');
+      if (!dlg) return;
+      dlg.showModal();
+      const noBtn = $('#resetNo');
+      const yesBtn = $('#resetYes');
+      if (noBtn) noBtn.onclick = ()=> dlg.close();
+      if (yesBtn) yesBtn.onclick = async ()=> {
+        try {
+          await idb.clear('orders');
+          await idb.put('meta', { key:'seq', value:1 });
+          await idb.put('meta', { key:'orderSeq', value:1 });
+          state.orderSeq = 1;
+          state.editingOrder = null;
+          await renderHistory();
+          await renderStats();
+          updateOrderNo();
+          state.cart = [];
+          const ci = $('#cashInput'); if (ci) ci.value = '';
+          renderCart();
+          dlg.close();
+          alert('初期化しました');
+        } catch (e) {
+          console.error(e);
+          alert('初期化に失敗しました');
+        }
+      };
+    });
+  } catch (e) {
+    console.error('reset wiring error', e);
+  }
+});
+
 // 追加: data-delボタンにテキスト「削除」を強制（キャッシュやスタイルの不整合対策）
 document.querySelectorAll('button[data-del]').forEach(b=>{
   if (!b.textContent.trim()) b.textContent = '削除';
