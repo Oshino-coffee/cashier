@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>推しの珈琲（オフライン対応）</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png" sizes="192x192">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#ffffff">
 <style>
   :root { --gap:12px; --btn:64px; --font:18px; }
@@ -522,7 +522,7 @@ async function exportCsv(){
   URL.revokeObjectURL(url);
 }
 
-async function openStats(){
+async async function openStats(){
   const dlg = $('#statsDlg');
   await renderStats();
   dlg.showModal();
