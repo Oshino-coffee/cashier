@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="ja">
 <head>
+  <style>
+/* Prevent 300ms delay / double-tap zoom on controls */
+a, button, input, select, textarea, summary, [role="button"] { touch-action: manipulation; }
+html { -webkit-text-size-adjust: 100%; }
+</style>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>推しの珈琲（オフライン対応）</title>
@@ -632,6 +637,19 @@ $('#resetAll').addEventListener('click', ()=> {
   };
 });
 
+</script>
+<script>
+// Block double-tap zoom on iOS Safari while keeping normal taps
+(function(){
+  var lastTouchEnd = 0;
+  document.addEventListener('touchend', function (event) {
+    var now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, {passive:false});
+})();
 </script>
 </body>
 </html>
